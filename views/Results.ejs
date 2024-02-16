@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- header file contains the head part of the project -->
+    <%- include('Layout/header.ejs'); %>
+
+        <body style="background-color: aquamarine;">
+            <!-- navbar of the project -->
+            <%- include('Layout/navbar.ejs'); %>
+                <h1 class="d-flex justify-content-center">Test Results</h1>
+                <div id="tbl_driver" class="container mt-5">
+                    <div class="row">
+                        <table class="table table-striped">
+                            <thead class="thead-dark-mystyle">
+                                <tr class="tblheading">
+                                    <th scope="col">Name</th>
+                                    <th scope="col">TestType</th>
+                                    <th scope="col">Add Comment</th>
+                                </tr>
+                            </thead>
+                            <% if(userdata.length == 0){ %>
+                                <tr>
+                                    <td colspan="4">No Data Found</td>
+                                </tr>
+                                <% }else{ %>
+                                    <% for(let y = 0;y < userdata.length; y++){%>
+                                    <tr class="<%= userdata[y].TestType %>">
+                                        <td><%= userdata[y].firstName %></td>
+                                        <td><%= userdata[y].TestType  %></td>
+                                        <td><button onClick='return driverDetails("<%- userdata[y].firstName %>","<%- userdata[y].lastName %>","<%- userdata[y].licenceNumber %>","<%- userdata[y].age %>","<%- userdata[y]._id %>");'> Add </button></td>
+                                    </tr>
+                                    <% } %>
+                                <% } %>
+                        </table>
+                    </div>
+                </div>
+                <div id="driver_details" class="container">
+                    <h3>Driver Details</h3>
+                    <div>
+                        <form method="post" action="/declareresult">
+                            <div class="form-group row col-6">
+                                <label class="col-sm-6 col-form-label">First Name :</label>
+                                <label class="col-sm-6 col-form-label" id="fname">null</label>
+                            </div>
+                            <div class="form-group row col-6">
+                                <label class="col-sm-6 col-form-label">Last Name</label>
+                                <label class="col-sm-6 col-form-label" id="lname">null</label>
+                            </div>
+                            <div class="form-group row col-6">
+                                <label class="col-sm-6 col-form-label">Licence Number :</label>
+                                <label class="col-sm-6 col-form-label" id="lnumber">null</label>
+                            </div>
+                            <div class="form-group row col-6">
+                                <label class="col-sm-6 col-form-label">Age :</label>
+                                <label class="col-sm-6 col-form-label" id="age">null</label>
+                            </div>
+                            <div class="form-group row">
+                                <label for="comment" class="col-sm-3 col-form-label">Comment :</label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" name="comment" id="comment" placeholder="comment">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="result" class="col-sm-3 col-form-label">Result :</label>
+                                <select class="col-sm-3" id="result" name="result">
+                                    <option value="Pass"> Pass </option>
+                                    <option value="Fail"> Fail </option>
+                                </select>
+                            </div>
+                            <input type="hidden" name="userID" id="userID" >
+                            <div class="form-group row col-6">
+                                <button type="submit">Submit Result</button>
+                            </div>
+                            <div class="form-group row col-6">
+                                <button id="goBack">Back</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <%- include('Layout/footer.ejs'); %>
+                <%- include('Layout/script.ejs'); %>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+                <script>
+                    
+                     $("#driver_details").hide();
+                    function driverDetails(fname,lname,licence,age, userID) {
+                        // let y = $(this).val();
+                        $("#tbl_driver,#filterbar").hide();
+                        $("#driver_details").show();
+                        $("#fname").text(fname);
+                        $("#lname").text(lname);
+                        $("#lnumber").text(licence);
+                        $("#age").text(age); userID
+                        $("#userID").val(userID); 
+                        return false;
+                    };    
+                    
+                    $("#goBack").click(function(){
+                        
+                        $("#tbl_driver,#filterbar").show();
+                        $("#driver_details").hide();
+                    })
+
+                </script>
+        </body>
+
+</html>

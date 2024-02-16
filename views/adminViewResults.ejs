@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- header file contains the head part of the project -->
+    <%- include('Layout/header.ejs'); %>
+
+        <body>
+            <!-- navbar of the project -->
+            <%- include('Layout/navbar.ejs'); %>
+                <h1 class="d-flex justify-content-center">Pick A Driver</h1>
+                <div class="container">
+                <div id="tbl_driver" class="mt-5">
+                    <div class="row">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr class="tblheading">
+                                    <th scope="col">Name</th>
+                                    <th scope="col">TestType</th>
+                                    <th scope="col">Result</th>
+                                    <th scope="col">comment</th>
+                                </tr>
+                            </thead>
+                            <% if(userdata.length == 0){ %>
+                                <tr>
+                                    <td colspan="4">No Data Found</td>
+                                </tr>
+                                <% }else{ %>
+                                    <% for(let y = 0;y < userdata.length; y++){%>
+                                    <tr class="<%= userdata[y].result %>">
+                                        <td><%= userdata[y].firstName %></td>
+                                        <td><%= userdata[y].TestType  %></td>
+                                        <td><%= userdata[y].result %></td>
+                                        <td><%= userdata[y].comment %></td>
+                                    </tr>
+                                    <% } %>
+                                <% } %>
+                        </table>
+                    </div>
+                </div>
+                </div>
+                
+                <%- include('Layout/footer.ejs'); %>
+                <%- include('Layout/script.ejs'); %>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        </body>
+
+</html>

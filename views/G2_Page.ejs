@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- header file contains the head part of the project -->
+    <%- include('Layout/header.ejs'); %>
+        <body>
+        <!-- navbar of the project -->
+            <%- include('Layout/navbar.ejs'); %>
+            <h1 class="d-flex justify-content-center">G2 License</h1>
+
+            <!-- form to book for g2 licence -->
+            <form method="post" action="/save/g2FormSubmit" class="container d-flex justify-content-center">
+            
+                <!-- personal information -->
+                <div class="col-6">
+                    <h5>Personal Information</h5>
+                    <br>
+                <div class="form-group row">
+                    <label for="firstName" class="col-sm-4 col-form-label">First Name</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" value="<%= userdata[0].firstName != 'default' ? userdata[0].firstName : "" %>">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="lastName" class="col-sm-4 col-form-label">Last Name</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" value="<%= userdata[0].lastName != 'default' ? userdata[0].lastName : "" %>">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="licenceNumber" class="col-sm-4 col-form-label">License Number</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="licenceNumber" name="licenceNumber" placeholder="Licence Number" value="<%= userdata[0].licenceNumber != 'default' ? userdata[0].licenceNumber : "" %>">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="age" class="col-sm-4 col-form-label">Age</label>
+                    <div class="col-sm-8">
+                        <input type="number" class="form-control" id="age" name="age" placeholder="Age" value="<%= userdata[0].age != 0 ? userdata[0].age : "" %>">
+                    </div>
+                </div>
+                <!-- end of personal information -->
+
+                <br>
+                
+                
+                <!-- car details -->
+
+
+                <h5>Car Details</h5>
+                <br>
+                <div class="form-group row">
+                    <label for="make" class="col-sm-4 col-form-label">Make</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="make" name="make" placeholder="make" value="<%= userdata[0].cardetails.make != 'default' ? userdata[0].cardetails.make : "" %>">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="model" class="col-sm-4 col-form-label">Model</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="model" name="model" placeholder="model" value="<%= userdata[0].cardetails.model != 'default' ? userdata[0].cardetails.model : "" %>">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="year" class="col-sm-4 col-form-label">Year</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="year" name="year" placeholder="year" value="<%= userdata[0].cardetails.year != "0" ? userdata[0].cardetails.year : "" %>">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="plateNumber" class="col-sm-4 col-form-label">Plate Number</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="plateNumber" name="plateNumber" placeholder="plate Number" value="<%= userdata[0].cardetails.plateNumber != 'default' ? userdata[0].cardetails.plateNumber : "" %>">
+                    </div>
+                </div>
+                <!--end of car details -->
+
+                <!-- appointment date -->
+                <br>
+                <h5>Appointment Details</h5>
+                <br>
+                <% if(userdata[0].appointmentID !='default' && userAppData[0].isTimeSlotAvailable == false ){ %>
+                    <div class="form-group row">
+                        <label for="appointmentDate" class="col-lg-4 col-form-label">Your Appointment Date :</label>
+                        <label for="appointmentDate" class="col-lg-8 col-form-label"><%= userAppData[0].date.toDateString() %></label>
+                    </div>
+                    <div class="form-group row">
+                        <label for="appointmentTime" class="col-lg-4 col-form-label">Your Appointment Time :</label>
+                        <label for="appointmentTime" class="col-lg-8 col-form-label"><%= userAppData[0].Time %></label>
+                    </div>
+                    <br>
+                    <% }else{ %>
+                       
+                <div class="form-group row">
+                    <label for="appointmentDate" class="col-lg-4 col-form-label">Select Appointment Date :</label>
+                    <select class="form-select"  class="col-lg-8" aria-label="select appointment Date" id="appointmentDate" name="appointmentDate">
+                        <!-- <option selected value="Driver">Driver</option>
+                        <option value="Examiner">Examiner</option>
+                        <option value="Admin">Admin</option> -->
+                        <% if(bookingSlots.length == 0){ %>
+                            <option>-- Sorry, No time slot available --</option>
+                        <% }else{ %>
+                        <option>-- Please Select a Date --</option>
+                        <% } %>
+                        <% let options = [], optionalreadyexist = 0 %>
+                        <% for(let y = 0;y < bookingSlots.length; y++){%>
+                            <% if(options.length == 0 ){ %>
+                                <option value='<%- bookingSlots[y].date %>'><%- bookingSlots[y].date.toDateString() %></option>
+                                <% options.push(bookingSlots[y].date) %>
+                        <% }else{ %>
+                            <% for(let z = 0;z < options.length; z++){
+                                if(options[z].toString() == bookingSlots[y].date.toString()){
+                                    optionalreadyexist = 1;
+                                 } %>
+                            <% } %>
+                            <% if(optionalreadyexist == 0){ %>
+                                <option value='<%- bookingSlots[y].date %>'><%- bookingSlots[y].date.toDateString() %></option>
+                                <% options.push(bookingSlots[y].date); %>
+                            <% } 
+                            }
+                            optionalreadyexist = 0;                        
+                        } %>
+                    </select>
+                </div>
+
+                <div class="form-group row">
+                    <label for="appointmentTime" class="col-lg-4 col-form-label">Select Appointment Time :</label>
+                    <div id="appointmentTime"></div>
+                </div>
+                <% } %>
+                <div class="form-group row">
+                    <div class="col-sm-8">
+                        <button type="submit" class="btn btn-dark">Submit</button>
+                    </div>
+                </div>
+                
+                <% if( userdata[0].result  != "default"){ %>
+                <h5 class="mt-5">Exam Results</h5>
+                <br>
+                <div class="form-group row">
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label">Exam Results :</label>
+                        <label class="col-lg-8 col-form-label"><%= userdata[0].result %></label>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+
+            </form>
+            <div class="mt-5 mb-5"></div><br><div class="mt-5 mb-5"></div><br>  
+            <div class="mt-5 mb-5"></div>
+            <%- include('Layout/footer.ejs'); %>
+            <%- include('Layout/script.ejs'); %>
+            <script>
+                $('#appointmentDate').on('change', function () {
+                    $("#appointmentTime").text("");
+                    let bookingSlotsObj = <%- JSON.stringify(bookingSlots) %>;       
+                    console.log(bookingSlotsObj);             
+                     for (let x = 0; x < bookingSlotsObj.length ; x++) {
+                        if(Date.parse(bookingSlotsObj[x].date).toString() == Date.parse(this.value).toString() && bookingSlotsObj[x].isTimeSlotAvailable == true){
+                            $("#appointmentTime").append('<input type="radio" name="Time" value="' + bookingSlotsObj[x]._id +'"><label for="' + bookingSlotsObj[x].Time +'">'+ bookingSlotsObj[x].Time +'</label><br>');
+                        }
+                    }
+                });
+
+            </script>
+        </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('Layout/header.ejs'); %>
+        <body >
+            <%- include('Layout/navbar.ejs'); %>
+            <h1 class="d-flex justify-content-center">Login</h1>
+
+            <!-- login form -->
+            <form method="POST" action="/loginForm" class="container d-flex justify-content-center">
+                <div class="col-6">
+                    <div>
+                        <label> Not a user? </label> <a href="/SignUp" class="link-dark">SIGN UP</a>
+                    </div>
+                    <!-- email field -->
+                    <div class="form-group">
+                        <label for="username">User Name :</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter User name">
+                    </div>
+
+                    <!-- password field -->
+                    <div class="form-group">
+                        <label for="password">Password :</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                    </div>
+
+                    <!-- submit button -->
+                    <input type="submit" class="btn btn-dark" value="Login" />
+                    <!-- <button type="submit" class="btn btn-primary">Login</button> -->
+
+                </div>
+            </form>
+            <% if(statusCode == 1) { %>
+                <div class="d-flex justify-content-center">
+                    <div class="alert alert-danger" role="alert">
+                        user name and password do not match !
+                    </div>
+                </div>
+            <% } %>
+            <% if(statusCode == 2) { %>
+                <div class="d-flex justify-content-center">
+                    <div class="alert alert-danger" role="alert">
+                        user not found !
+                    </div>
+                </div>
+            <% } %>
+            <!-- <% if(statusCode == 0) { %>
+              
+            <% } %> -->
+            
+            
+            <!-- end of login form -->
+            <%- include('Layout/footer.ejs'); %>
+            <%- include('Layout/script.ejs'); %>
+        </body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- header file contains the head part of the project -->
+    <%- include('Layout/header.ejs'); %>
+
+        <body>
+            <!-- navbar of the project -->
+            <%- include('Layout/navbar.ejs'); %>
+                <h1 class="d-flex justify-content-center">Pick A Driver</h1>
+                <div class="container">
+                <div id="filterbar" class="form-group row">
+                    <label class="col-sm-2 col-form-label">Filter By :</label>
+                    <select class="col-sm-2" id="testTypeFilter" name="testTypeFilter">
+                        <option value="All">-- Show All --</option>
+                        <option value="G2"> G2 </option>
+                        <option value="G"> G </option>
+                    </select>
+                </div>
+                <div id="tbl_driver" class="mt-5">
+                    <div class="row">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr class="tblheading">
+                                    <th scope="col">Name</th>
+                                    <th scope="col">TestType</th>
+                                    <th scope="col">Licence No</th>
+                                    <th scope="col">Age</th>
+                                    <th scope="col">Assign</th>
+                                </tr>
+                            </thead>
+                            <% if(userdata.length == 0){ %>
+                                <tr>
+                                    <td colspan="5">No Data Found</td>
+                                </tr>
+                                <% }else{ %>
+                                    <% for(let y = 0;y < userdata.length; y++){%>
+                                    <tr class="<%= userdata[y].TestType %>">
+                                        <td><%= userdata[y].firstName %></td>
+                                        <td><%= userdata[y].TestType  %></td>
+                                        <td><%= userdata[y].licenceNumber  %></td>
+                                        <td><%= userdata[y].age  %></td>
+                                        <td>
+                                            <% if(userdata[y].ExaminerID == "default" ){ %>
+                                                <form method="post" action="/pickDriver">
+                                                    <input type="hidden" value="<%- userdata[y]._id %>" name="userID" >
+                                                    <button>Assign driver</button>
+                                                </form>
+                                            <% } else { %>
+                                                 Assigned
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                                <% } %>
+                        </table>
+                    </div>
+                </div>
+                </div>
+                <%- include('Layout/footer.ejs'); %>
+                <%- include('Layout/script.ejs'); %>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+                <script>
+
+                     $('#testTypeFilter').on('change', function () {
+
+                        var rows = $('#tbl_driver tr');
+
+                        // $("#tbl_driver").find("tr:gt(0)").remove();
+                        let DriverListObj = <%- JSON.stringify(userdata) %>;  
+                        let myclass = "." + $(this).val();
+                        for (let x = 0; x < DriverListObj.length; x++) {
+                            if ($(this).val() == "All"){
+                                rows.filter(".G").show();
+                                rows.filter(".G2").show();
+                            } else if($(this).val() == DriverListObj[x].TestType){
+                                let category = rows.filter(myclass).show();
+                                rows.not(category).hide();
+                                rows.filter(".tblheading").show();
+                            //    $('#tbl_driver').append('<tr> <td>'+ DriverListObj[x].firstName +'</td> <td>' + DriverListObj[x].TestType +'</td> <td>my data</td><td>more data</td></tr>');
+                            }
+                        }
+                     });
+
+                </script>
+        </body>
+
+</html>

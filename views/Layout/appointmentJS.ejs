@@ -1,0 +1,73 @@
+<script>
+    
+    let todayDate = new Date();
+    let tomorrowDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate() + 1);
+    
+    let dd = tomorrowDate.getDate();
+    let mm = tomorrowDate.getMonth() + 1; //January is 0!
+    let yyyy = tomorrowDate.getFullYear();
+
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+
+    tomorrowDate = yyyy + '-' + mm + '-' + dd;
+    document.getElementById("bookingDate").setAttribute("min", tomorrowDate);
+
+    const btn_bookingDate = document.getElementById('bookingDate');
+
+    btn_bookingDate.addEventListener('change', async () => {
+
+        var sList = ""; 
+        $('input[type=checkbox]').each(function () {
+            $(this).prop({ 'checked': false, "disabled": false });
+        });
+
+                $.ajax({
+                url: "/fetchTimeSlots",
+                method: 'POST',
+                async: true,
+                data: {
+                    'bookingDate': $("#bookingDate").val()
+                },
+                success: function (data, status, xhr) {
+                    // console.log(data);
+                    for(let i = 0;i < data.length; i++){
+                        // console.log(data[i].Time);
+                        switch (data[i].Time) {
+                            case '9:00 am':
+                                $('#9am').prop({'checked':true, "disabled":true});
+                                break;
+                            case '9:30 am':
+                                $('#930am').prop({ 'checked': true, "disabled": true });
+                                break;
+                            case '10:00 am':
+                                $('#10am').prop({ 'checked': true, "disabled": true });
+                                break;
+                            case '10:30 am':
+                                $('#1030am').prop({ 'checked': true, "disabled": true });
+                                break;
+                            case '11:00 am':
+                                $('#11am').prop({ 'checked': true, "disabled": true });
+                                break;
+                            default:
+                            // code block
+                        }
+                    }
+                   
+                },
+                complete: function (xhr, txtStatus) {
+                    // console.log(xhr);
+                    if (xhr.status === 302) {
+                        
+                    }
+                }
+            });
+        
+        });
+
+</script>
